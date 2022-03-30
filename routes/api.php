@@ -24,13 +24,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [App\Http\Controllers\API\AuthController::class, 'register']);
 //API route for login user
 Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login']);
-Route::put('/user/{id}', [App\Http\Controllers\API\AuthController::class, 'update']);
 
 
 // Protecting Routes agus
-// Route::middleware('auth:sanctum')->group(function(){
-//     Route::put('/user/update/{id}', [AuthController::class], 'update');
-// });
+Route::middleware('auth:sanctum')->group(function(){
+    Route::put('/user/{id}', [App\Http\Controllers\API\AuthController::class, 'update']);
+    //add comment
+});
 
 
 //Protecting Routes
