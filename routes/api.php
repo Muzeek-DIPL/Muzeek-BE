@@ -20,7 +20,7 @@ Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 
 Route::get('/musicians', [MusicianController::class, 'get']);
-Route::get('/musicians/{id}', [MusicianController::class, 'get_by_id']);
+Route::get('/musicians/{id}', [MusicianController::class, 'get_by_id']); 
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);
