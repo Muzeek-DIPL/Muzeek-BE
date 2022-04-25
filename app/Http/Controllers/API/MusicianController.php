@@ -32,8 +32,8 @@ class MusicianController extends Controller
 
     public function get(Request $request)
     {
-        $page = empty($request->input('page')) ? 1 : $request->input('page');
-        $limit = $page == 1 ? 8 : $page * 8;
+        $page = $request->input('page') || 1;
+        $limit = $page == 1 ? 9 : $page * 9;
         $offset = $page == 1 ? 0 : $page * $limit;
 
         $sort_param = $request->input('sort_by');
