@@ -32,10 +32,6 @@ class MusicianController extends Controller
 
     public function get(Request $request)
     {
-        $page = $request->input('page') || 1;
-        $limit = $page == 1 ? 9 : $page * 9;
-        $offset = $page == 1 ? 0 : $page * $limit;
-
         $sort_param = $request->input('sort_by');
         $order_by = $sort_param == 'likes' ? 'likes' : 'created_at';
 
@@ -51,15 +47,13 @@ class MusicianController extends Controller
                 ->orWhere('users.full_name', 'like', '%' . $key . '%')
                 ->whereIn('musicians.instrument', $instrument)
                 ->orderBy('musicians.' . $order_by, 'desc')
-                ->offset($offset)
-                ->limit($limit)
-                ->get(self::$selected_field);
+                ->get(self::$selected_field)
+                ->paginate(9);
         } else {
             $response = Musician::join('users', 'musicians.user_id', '=', 'users.id')
                 ->orderBy($order_by, 'desc')
-                ->offset($offset)
-                ->limit($limit)
-                ->get(self::$selected_field);
+                ->get(self::$selected_field)
+                ->paginate(9);
         }
 
         return ResponseBuilder::success($response, "Success");

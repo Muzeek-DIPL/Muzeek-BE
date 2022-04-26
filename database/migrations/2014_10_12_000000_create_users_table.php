@@ -19,10 +19,10 @@ return new class extends Migration
             $table->string('email', 50);
             $table->string('password');
             $table->string('full_name', 50);
-            $table->text('about')->default('');
+            $table->text('about');
             $table->string('location', 50)->default('');
             $table->string('phone', 16);
-            $table->text('img_link')->default('');
+            $table->longText('img_link');
             $table->rememberToken();
             $table->timestamps();
         });

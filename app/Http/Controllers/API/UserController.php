@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    protected static $default_values = [
+        'about' => '',
+        'location' => '',
+        'img_link' => 'https://firebasestorage.googleapis.com/v0/b/museek-d935c.appspot.com/o/default_avatar.png?alt=media&token=01f59951-b62a-462b-b50a-fb27de146e0c',
+    ];
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -24,13 +30,16 @@ class UserController extends Controller
         if ($validator->fails()) {
             return ResponseBuilder::error($validator->errors()->all(), 422);
         }
-
+        error_log('username: ' . $request->username);
         $user = User::create([
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'full_name' => $request->full_name,
             'phone' => $request->phone,
+            'about' => self::$default_values['about'],
+            'location' => self::$default_values['location'],
+            'img_link' => self::$default_values['img_link'],
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -84,10 +93,10 @@ class UserController extends Controller
         $user = User::find($request->user()->id);
         $user->email = $request->email;
         $user->full_name = $request->full_name;
-        $user->about = $request->about;
-        $user->location = $request->location;
+        $user->about = $request->about == '' ? $user->about : $request->about;
+        $user->location = $request->location == '' ? $user->location : $request->location;
         $user->phone = $request->phone;
-        $user->img_link = $request->img_link;
+        $user->img_link = $request->img_link == '' ? $user->img_link : $request->img_link;
         $user->save();
 
         return ResponseBuilder::success($user, "Update success");
