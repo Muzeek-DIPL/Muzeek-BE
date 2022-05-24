@@ -2,48 +2,31 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Helpers\ResponseBuilder;
 use App\Http\Controllers\Controller;
-use App\Models\Comment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Interfaces\CommentInterface;
 
 class CommentController extends Controller
 {
+    protected $commentInterface;
+
+    public function __construct(CommentInterface $commentInterface)
+    {
+        $this->commentInterface = $commentInterface;
+    }
+
     public function post(Request $request, $musician_id)
     {
-        $validator = Validator::make($request->all(), [
-            'text' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return ResponseBuilder::error($validator->errors()->all(), 422);
-        }
-
-        $comment = Comment::create([
-            'commenter_id' => $request->user()->id,
-            'musician_id' => $musician_id,
-            'text' => $request->text,
-        ]);
-
-        return ResponseBuilder::success($comment, "Comment success");
+        return $this->commentInterface->post($request, $musician_id);
     }
 
     public function delete(int $id)
     {
-        $comment = Comment::find($id);
-        $comment->delete();
-
-        return ResponseBuilder::success(null, "Comment deleted");
-
+        return $this->commentInterface->delete($id);
     }
 
     public function get_by_musician(int $musician_id)
     {
-        $comments = Comment::with('commenters:id,full_name,img_link')
-            ->where('musician_id', $musician_id)
-            ->get();
-
-        return ResponseBuilder::success($comments, "Get comments success");
+        return $this->commentInterface->get_by_musician($musician_id);
     }
 }
