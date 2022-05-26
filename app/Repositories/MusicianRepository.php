@@ -41,22 +41,22 @@ class MusicianRepository implements MusicianInterface
         $response = new Musician;
         $key = $request->input('keyword');
         $instrument = empty($request->input('instrument'))
-        ? self::$instruments
-        : explode(',', $request->input('instrument'));
+            ? self::$instruments
+            : explode(',', $request->input('instrument'));
 
         if ($key || $instrument) {
             $response = Musician::join('users', 'musicians.user_id', '=', 'users.id')
                 ->whereIn('musicians.instrument', $instrument)
-                ->where(function($query) use ($key){
+                ->where(function ($query) use ($key) {
                     $query->where('users.location', 'ILIKE', '%' . $key . '%')
                         ->orWhere('users.full_name', 'ILIKE', '%' . $key . '%');
                 })
                 ->orderBy('musicians.' . $order_by, 'desc')
-                ->paginate(9, self::$selected_field);
+                ->paginate(8, self::$selected_field);
         } else {
             $response = Musician::join('users', 'musicians.user_id', '=', 'users.id')
                 ->orderBy($order_by, 'desc')
-                ->paginate(9, self::$selected_field);
+                ->paginate(8, self::$selected_field);
         }
 
         return ResponseBuilder::success($response, "Success");
@@ -102,7 +102,8 @@ class MusicianRepository implements MusicianInterface
             // Mengambalikan data jumlah likes musisi
             return ResponseBuilder::success(
                 ['likes' => $musician->likes],
-                "Musician disliked");
+                "Musician disliked"
+            );
         }
 
         // Jika user belum pernah meng-like musisi maka buat record pada tabel user_liked_musician
@@ -117,6 +118,7 @@ class MusicianRepository implements MusicianInterface
         // Mengambalikan data jumlah likes musisi
         return ResponseBuilder::success(
             ['likes' => $musician->likes],
-            "Musician liked");
+            "Musician liked"
+        );
     }
 }
