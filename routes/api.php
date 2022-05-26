@@ -20,7 +20,9 @@ Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 
 Route::get('/musicians', [MusicianController::class, 'get']);
-Route::get('/musicians/{id}', [MusicianController::class, 'get_by_id']); 
+Route::get('/musicians/{id}', [MusicianController::class, 'get_by_id']);
+
+Route::get('/comments/{musician_id}', [CommentController::class, 'get_by_musician']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);
@@ -31,5 +33,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/comments/{musician_id}', [CommentController::class, 'post']);
     Route::delete('/comments/{id}', [CommentController::class, 'delete']);
-    Route::get('/comments/{musician_id}', [CommentController::class, 'get_by_musician']);
 });
