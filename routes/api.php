@@ -27,6 +27,7 @@ Route::get('/comments/{musician_id}', [CommentController::class, 'get_by_musicia
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);
     Route::put('/users/update', [UserController::class, 'update']);
+    Route::put('/users/update_instrument', [UserController::class, 'update_instrument']);
     Route::put('/users/publish', [UserController::class, 'publish']);
 
     Route::put('/musicians/{id}/like', [MusicianController::class, 'like']);

@@ -39,4 +39,9 @@ class UserController extends Controller
     {
         return $this->userInterface->publish($request);
     }
+
+    public function update_instrument(Request $request)
+    {
+        return $this->userInterface->update_instrument($request);
+    }
 }

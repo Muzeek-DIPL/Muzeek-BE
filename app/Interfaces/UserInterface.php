@@ -11,4 +11,5 @@ interface UserInterface
     public function update(Request $request);
     public function logout();
     public function publish(Request $request);
+    public function update_instrument(Request $request);
 }

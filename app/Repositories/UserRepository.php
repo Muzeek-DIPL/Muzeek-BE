@@ -140,4 +140,19 @@ class UserRepository implements UserInterface
         // Mengembalikan pesan "Profile published"
         return ResponseBuilder::success(null, "Profile published");
     }
+
+    public function update_instrument(Request $request){
+        $validator = Validator::make($request->all(), [
+            'instrument' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return ResponseBuilder::error($validator->errors()->all(), 422);
+        }
+
+        $musician = Musician::where('user_id', $request->user()->id)->first();
+        $musician->instrument = $request->instrument;
+        $musician->save();
+
+        return ResponseBuilder::success(null, "Instrument updated");
+    }
 }

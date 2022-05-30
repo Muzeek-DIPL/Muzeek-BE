@@ -59,18 +59,22 @@ class MusicianRepository implements MusicianInterface
                 ->paginate(8, self::$selected_field);
         }
 
+        foreach ($response as $musician) {
+            $musician->liked_by = $musician->liked_by()->get()->pluck('user_id');
+        }
+
         return ResponseBuilder::success($response, "Success");
     }
 
     // Method ini digunakan untuk mengambil data musisi berdasarkan id
-    // @param $id: id musisi
+    // @param $id: id user
     // @return: data musisi sesuai id yang diberikan
     public function get_by_id(int $id)
     {
         // Query ke tabel musisi yang dijoin dengan user berdasarkan id
         $response = Musician::join('users', 'musicians.user_id', '=', 'users.id')
             ->select(self::$selected_field)
-            ->find($id);
+            ->where('user_id', $id)->first();
 
         // Menambahkan field liked_by pada response dengan mengambil data dari tabel user_liked_musician
         $response->liked_by = $response->liked_by()->get()->pluck('user_id');
